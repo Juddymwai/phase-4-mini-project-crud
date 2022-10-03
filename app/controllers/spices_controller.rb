@@ -5,6 +5,17 @@ class SpicesController < ApplicationController
         render json: spices
     end
 
+    def show 
+        spices = Spice.find_by(id: params[:id])
+
+        if spices 
+        render json: spices
+        else 
+            render_spice_not_found
+
+        end
+    end
+
     def create 
         
         spices = Spice.create(spice_params)
@@ -17,7 +28,7 @@ class SpicesController < ApplicationController
             spices.update(spice_params)
             render json: spices
         else 
-            render json: {error: "spice not found"}
+            render_spice_not_found
         end
     end
 
@@ -30,7 +41,7 @@ class SpicesController < ApplicationController
             head :no_content
         else 
                 
-            render json: {error: "spice not found"}
+            render_spice_not_found
         end
     end
 
@@ -42,5 +53,12 @@ class SpicesController < ApplicationController
     def spice_params 
         params.permit(:title, :image, :description, :notes, :rating)
     end
+
+
+     def render_spice_not_found 
+        render json: {error: "spice not found"}
+
+
+     end
 end
 
